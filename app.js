@@ -13,7 +13,25 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/WikiDB");
+mongoose.connect("mongodb://localhost:27017/WikiDB", {useNewUrlParser: true});
+
+const articleSchema = {
+    title: String,
+    content: String
+};
+
+const Article = mongoose.model("Article",articleSchema);
+
+app.get("/articles",function(req,res){
+    Article.find(function(err,foundArticles){
+        if(!err){
+            res.send(foundArticles)
+        }else {
+            res.send(err)
+        }
+        
+    })
+})
 
 //TODO
 
